@@ -1,0 +1,264 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 220 33% 98%;
+    --foreground: 222 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    --primary: 199 94% 54%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 84 100% 39%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 199 94% 54%;
+
+    --radius: 0.75rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-quicksand);
+    font-size: 1.05rem;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c3ddff' fill-opacity='0.2'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  /* Force theme fonts everywhere */
+  * {
+    font-family: var(--font-quicksand);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .font-heading,
+  [class*="text-xl"],
+  [class*="text-2xl"],
+  [class*="text-3xl"],
+  [class*="text-4xl"],
+  [class*="font-bold"] {
+    font-family: var(--font-nunito) !important;
+  }
+
+  /* Override any potential system fonts in UI components */
+  button,
+  input,
+  select,
+  textarea,
+  .font-body {
+    font-family: var(--font-quicksand) !important;
+  }
+
+  /* Ensure shadcn components use our fonts */
+  .ui-button,
+  .ui-card-title,
+  .ui-card-description,
+  .ui-dialog-title,
+  .ui-dialog-description,
+  .ui-popover-content,
+  .ui-select-content,
+  .ui-tabs-content,
+  .ui-tooltip-content {
+    font-family: var(--font-quicksand) !important;
+  }
+
+  /* Ensure ReactMarkdown content uses our fonts */
+  .prose * {
+    font-family: var(--font-quicksand) !important;
+  }
+
+  .prose h1,
+  .prose h2,
+  .prose h3,
+  .prose h4,
+  .prose h5,
+  .prose h6,
+  .prose strong,
+  .prose b {
+    font-family: var(--font-nunito) !important;
+  }
+}
+
+@layer components {
+  .font-heading {
+    font-family: var(--font-nunito);
+  }
+
+  .font-body {
+    font-family: var(--font-quicksand);
+  }
+
+  /* Playful button styles */
+  .btn-playful {
+    @apply rounded-full font-bold transition-all duration-200;
+    font-family: var(--font-nunito);
+    transform: translateY(0);
+    box-shadow: 0 4px 0 0 rgba(0, 0, 0, 0.1);
+  }
+
+  .btn-playful:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 0 rgba(0, 0, 0, 0.1);
+  }
+
+  .btn-playful:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.1);
+  }
+
+  /* Mascot animation */
+  .mascot {
+    animation: mascot-peek 3s ease-in-out infinite;
+    transform-origin: bottom center;
+  }
+
+  @keyframes mascot-peek {
+    0%,
+    100% {
+      transform: translateY(0) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-15px) rotate(3deg);
+    }
+  }
+
+  /* Duolingo-style progress bar */
+  .progress-bar {
+    @apply h-2.5 rounded-full bg-gray-200 overflow-hidden;
+  }
+
+  .progress-bar-fill {
+    @apply h-full bg-gradient-to-r from-primary to-secondary transition-all duration-500;
+  }
+}
+
+/* Prose styles for markdown content */
+.prose {
+  @apply max-w-none;
+  font-family: var(--font-quicksand);
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  @apply font-bold mb-4 mt-6;
+  font-family: var(--font-nunito);
+  color: hsl(var(--primary));
+}
+
+.prose h1 {
+  @apply text-3xl;
+}
+
+.prose h2 {
+  @apply text-2xl;
+}
+
+.prose h3 {
+  @apply text-xl;
+}
+
+.prose p {
+  @apply mb-4;
+}
+
+.prose ul,
+.prose ol {
+  @apply mb-4 pl-6;
+}
+
+.prose ul {
+  @apply list-disc;
+}
+
+.prose ol {
+  @apply list-decimal;
+}
+
+.prose code {
+  @apply bg-muted px-1 py-0.5 rounded text-sm;
+}
+
+.prose pre {
+  @apply bg-muted p-4 rounded-lg overflow-x-auto mb-4;
+}
+
+.prose a {
+  @apply text-primary hover:underline;
+}
+
+.prose blockquote {
+  @apply border-l-4 pl-4 italic;
+  border-color: hsl(var(--primary));
+}
+
+/* Custom slider styles */
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 8px;
+  border-radius: 4px;
+  outline: none;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #3b82f6;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+}
+
+.slider::-webkit-slider-thumb:hover {
+  background: #2563eb;
+  transform: scale(1.1);
+}
+
+.slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #3b82f6;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+}
+
+.slider::-moz-range-thumb:hover {
+  background: #2563eb;
+  transform: scale(1.1);
+}
