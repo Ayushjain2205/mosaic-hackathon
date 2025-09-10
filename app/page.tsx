@@ -282,15 +282,14 @@ export default function Home() {
       setError("");
 
       // Add cache-busting query parameter and proper error handling
-      const response = await fetch(
-        `/api/mock-course?topic=${encodeURIComponent(prompt)}&t=${Date.now()}`,
-        {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-          },
-        }
-      );
+      const response = await fetch("/api/generate-course", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({ prompt }),
+      });
 
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`);
