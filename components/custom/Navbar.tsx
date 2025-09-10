@@ -20,7 +20,7 @@ export function Navbar() {
     },
     {
       name: "My Courses",
-      href: "/course",
+      href: "/",
       icon: <BookOpen className="h-4 w-4 mr-2" />,
     },
   ];
