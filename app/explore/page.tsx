@@ -9,6 +9,7 @@ import { CourseTile } from "@/components/custom/CourseTile";
 import { Mascot } from "@/components/custom/Mascot";
 import { Search, Filter, Sparkles, TrendingUp, BookOpen } from "lucide-react";
 import { motion } from "framer-motion";
+import { demoCourses } from "@/lib/demo-courses";
 
 interface Quiz {
   question: string;
@@ -48,156 +49,8 @@ interface Course {
 
 // Sample course data - in a real app, this would come from an API
 const allCourses: Course[] = [
-  {
-    title: "Introduction to JavaScript",
-    difficulty: "Beginner",
-    completion: 82,
-    icon: "💻",
-    creator: "Prof. Alex Chen",
-    tags: ["Programming", "Web"],
-    category: "Technology",
-    type: "slides",
-  },
-  {
-    title: "Climate Change Basics",
-    difficulty: "Beginner",
-    completion: 76,
-    icon: "🌍",
-    creator: "Dr. Maya Johnson",
-    tags: ["Science", "Environment"],
-    category: "Science",
-    type: "video",
-  },
-  {
-    title: "Digital Marketing 101",
-    difficulty: "Beginner",
-    completion: 84,
-    icon: "📱",
-    creator: "Sarah Williams",
-    tags: ["Marketing", "Business"],
-    category: "Business",
-    type: "slides",
-  },
-  {
-    title: "Introduction to Psychology",
-    difficulty: "Beginner",
-    completion: 79,
-    icon: "🧠",
-    creator: "Dr. James Peterson",
-    tags: ["Psychology", "Science"],
-    category: "Science",
-    type: "video",
-  },
-  {
-    title: "Web Design Fundamentals",
-    difficulty: "Intermediate",
-    completion: 68,
-    icon: "🎨",
-    creator: "Emma Rodriguez",
-    tags: ["Design", "Web"],
-    category: "Arts",
-    type: "slides",
-  },
-  {
-    title: "Data Science Essentials",
-    difficulty: "Intermediate",
-    completion: 72,
-    icon: "📊",
-    creator: "Michael Thompson",
-    tags: ["Data", "Programming"],
-    category: "Technology",
-    type: "video",
-  },
-  {
-    title: "Creative Writing Workshop",
-    difficulty: "All Levels",
-    completion: 88,
-    icon: "✍️",
-    creator: "Olivia Parker",
-    tags: ["Writing", "Arts"],
-    category: "Arts",
-    type: "slides",
-  },
-  {
-    title: "Personal Finance Basics",
-    difficulty: "Beginner",
-    completion: 91,
-    icon: "💰",
-    creator: "Robert Garcia",
-    tags: ["Finance", "Life Skills"],
-    category: "Business",
-    type: "slides",
-  },
-  {
-    title: "Introduction to Astronomy",
-    difficulty: "Beginner",
-    completion: 85,
-    icon: "🔭",
-    creator: "Dr. Samantha Lee",
-    tags: ["Space", "Science"],
-    category: "Science",
-    type: "video",
-  },
-  {
-    title: "Healthy Cooking Fundamentals",
-    difficulty: "All Levels",
-    completion: 77,
-    icon: "🥗",
-    creator: "Chef Daniel Kim",
-    tags: ["Cooking", "Health"],
-    category: "Lifestyle",
-    type: "slides",
-  },
-  {
-    title: "Yoga for Beginners",
-    difficulty: "Beginner",
-    completion: 94,
-    icon: "🧘",
-    creator: "Sophia Martinez",
-    tags: ["Fitness", "Wellness"],
-    category: "Health",
-    type: "video",
-  },
-  {
-    title: "Photography Basics",
-    difficulty: "Beginner",
-    completion: 81,
-    icon: "📷",
-    creator: "David Wilson",
-    tags: ["Photography", "Arts"],
-    category: "Arts",
-    type: "slides",
-  },
-  {
-    title: "React Hooks Audio Course",
-    difficulty: "Intermediate",
-    completion: 78,
-    icon: "🎧",
-    creator: "Miss Nova",
-    tags: ["Programming", "React", "Audio"],
-    category: "Technology",
-    type: "audio",
-  },
-  {
-    title: "Meditation & Mindfulness",
-    difficulty: "All Levels",
-    completion: 92,
-    icon: "🧘",
-    creator: "Dr. Sarah Chen",
-    tags: ["Wellness", "Mindfulness", "Audio"],
-    category: "Health",
-    type: "audio",
-  },
-  {
-    title: "Language Learning - Spanish",
-    difficulty: "Beginner",
-    completion: 85,
-    icon: "🗣️",
-    creator: "Prof. Maria Rodriguez",
-    tags: ["Language", "Spanish", "Audio"],
-    category: "Language",
-    type: "audio",
-  },
+  // Demo courses with complete slide data
+  ...demoCourses,
 ];
 
 // Mock course data for the "Try" button
@@ -225,21 +78,10 @@ const mockCourseData = {
   ],
 };
 
-// Add mock slides data to all courses
-allCourses.forEach((course) => {
-  course.slides = mockCourseData.slides;
-});
+// Demo courses already have complete slide data, no need to add mock data
 
 // Categories for filtering
-const categories = [
-  "All",
-  "Technology",
-  "Science",
-  "Business",
-  "Arts",
-  "Lifestyle",
-  "Health",
-];
+const categories = ["All", "Technology", "Arts", "Business"];
 
 // Difficulty levels for filtering
 const difficultyLevels = ["All Levels", "Beginner", "Intermediate", "Advanced"];

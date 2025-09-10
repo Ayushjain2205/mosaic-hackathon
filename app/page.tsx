@@ -21,6 +21,7 @@ import type {
   CategoryType,
   CourseType,
 } from "@/components/custom/CourseTile";
+import { demoCourses } from "@/lib/demo-courses";
 
 interface Quiz {
   question: string;
@@ -77,81 +78,8 @@ const courseTypes = [
   { value: "audio", label: "Audio", emoji: "🎧" },
 ];
 
-// Sample course data
-const popularCourses: Course[] = [
-  {
-    title: "Introduction to JavaScript",
-    difficulty: "Beginner",
-    completion: 82,
-    icon: "💻",
-    tags: ["Programming", "Web"],
-    category: "Technology",
-    type: "slides",
-  },
-  {
-    title: "Climate Change Basics",
-    difficulty: "Beginner",
-    completion: 76,
-    icon: "🌍",
-    tags: ["Science", "Environment"],
-    category: "Science",
-    type: "video",
-  },
-  {
-    title: "Digital Marketing 101",
-    difficulty: "Beginner",
-    completion: 84,
-    icon: "📱",
-    tags: ["Marketing", "Business"],
-    category: "Business",
-    type: "slides",
-  },
-  {
-    title: "Introduction to Psychology",
-    difficulty: "Beginner",
-    completion: 79,
-    icon: "🧠",
-    tags: ["Psychology", "Science"],
-    category: "Science",
-    type: "video",
-  },
-  {
-    title: "Web Design Fundamentals",
-    difficulty: "Intermediate",
-    completion: 68,
-    icon: "🎨",
-    tags: ["Design", "Web"],
-    category: "Arts",
-    type: "slides",
-  },
-  {
-    title: "Data Science Essentials",
-    difficulty: "Intermediate",
-    completion: 72,
-    icon: "📊",
-    tags: ["Data", "Programming"],
-    category: "Technology",
-    type: "video",
-  },
-  {
-    title: "React Hooks Audio Course",
-    difficulty: "Intermediate",
-    completion: 78,
-    icon: "🎧",
-    tags: ["Programming", "React", "Audio"],
-    category: "Technology",
-    type: "audio",
-  },
-  {
-    title: "Meditation & Mindfulness",
-    difficulty: "All Levels",
-    completion: 92,
-    icon: "🧘",
-    tags: ["Wellness", "Mindfulness", "Audio"],
-    category: "Health",
-    type: "audio",
-  },
-];
+// Use demo courses with complete slide data
+const popularCourses: Course[] = demoCourses;
 
 // Mock course data for the "Try" button
 const mockCourseData = {
@@ -249,10 +177,7 @@ const mockCourseData = {
   ],
 };
 
-// Update all courses with the mock slides data
-popularCourses.forEach((course) => {
-  course.slides = mockCourseData.slides;
-});
+// Demo courses already have complete slide data, no need to add mock data
 
 export default function Home() {
   const router = useRouter();
