@@ -41,6 +41,7 @@
     "@radix-ui/react-tooltip": "^1.1.6",
     "@remotion/media-utils": "^4.0.344",
     "@remotion/player": "^4.0.79",
+    "@supabase/supabase-js": "^2.57.4",
     "@wavesurfer/react": "^1.0.11",
     "ai": "latest",
     "autoprefixer": "^10.4.20",

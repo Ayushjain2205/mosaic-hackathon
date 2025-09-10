@@ -61,6 +61,7 @@ interface CourseTileProps {
   tags?: string[];
   slides?: any[]; // Using any for simplicity, but should match your slide structure
   type?: CourseType;
+  courseId?: string; // Add course ID for database fetching
 }
 
 export function CourseTile({
@@ -73,22 +74,63 @@ export function CourseTile({
   tags = [],
   slides = [],
   type = "slides", // Default to slides if not specified
+  courseId,
 }: CourseTileProps) {
   const router = useRouter();
 
-  const handleCourseSelect = () => {
-    if (slides.length > 0) {
-      // Store the selected course in localStorage
+  const handleCourseSelect = async () => {
+    if (courseId) {
+      try {
+        // Fetch the full course data from the database
+        const response = await fetch(`/api/courses/${courseId}`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch course data");
+        }
+
+        const courseData = await response.json();
+
+        // Store the selected course in localStorage
+        localStorage.setItem("currentCourse", JSON.stringify(courseData));
+
+        // Route to the appropriate page based on course type
+        if (type === "video") {
+          router.push("/video-course");
+        } else if (type === "audio") {
+          router.push("/audio-course");
+        } else {
+          router.push("/course");
+        }
+      } catch (error) {
+        console.error("Error fetching course:", error);
+        // Fallback to basic course data
+        const selectedCourse = {
+          title,
+          description: `A comprehensive guide to ${title}`,
+          total_slides: slides.length,
+          slides,
+          type,
+        };
+        localStorage.setItem("currentCourse", JSON.stringify(selectedCourse));
+
+        if (type === "video") {
+          router.push("/video-course");
+        } else if (type === "audio") {
+          router.push("/audio-course");
+        } else {
+          router.push("/course");
+        }
+      }
+    } else if (slides.length > 0) {
+      // Fallback for courses without courseId
       const selectedCourse = {
         title,
         description: `A comprehensive guide to ${title}`,
         total_slides: slides.length,
         slides,
-        type, // Include the course type
+        type,
       };
       localStorage.setItem("currentCourse", JSON.stringify(selectedCourse));
 
-      // Route to the appropriate page based on course type
       if (type === "video") {
         router.push("/video-course");
       } else if (type === "audio") {
