@@ -9,11 +9,226 @@ import { CourseTile } from "@/components/custom/CourseTile";
 import { Mascot } from "@/components/custom/Mascot";
 import { Search, Filter, Sparkles, TrendingUp, BookOpen } from "lucide-react";
 import { motion } from "framer-motion";
-import { Course } from "@/lib/supabase";
 
-// Course interface is now imported from lib/supabase
+interface Quiz {
+  question: string;
+  options: string[];
+  correct_answer: string;
+  explanation: string;
+}
 
-// Course data will be fetched from the database
+interface Slide {
+  slide_number: number;
+  title: string;
+  content: string;
+  quiz: Quiz;
+}
+
+interface Course {
+  title: string;
+  difficulty: "Beginner" | "Intermediate" | "Advanced" | "All Levels";
+  completion: number;
+  icon: string;
+  tags: string[];
+  category?:
+    | "Technology"
+    | "Science"
+    | "Business"
+    | "Arts"
+    | "Health"
+    | "Language"
+    | "Mathematics"
+    | "History"
+    | "Lifestyle"
+    | "Other";
+  slides?: Slide[];
+  creator?: string;
+  type?: "slides" | "video" | "audio";
+}
+
+// Sample course data - in a real app, this would come from an API
+const allCourses: Course[] = [
+  {
+    title: "Introduction to JavaScript",
+    difficulty: "Beginner",
+    completion: 82,
+    icon: "💻",
+    creator: "Prof. Alex Chen",
+    tags: ["Programming", "Web"],
+    category: "Technology",
+    type: "slides",
+  },
+  {
+    title: "Climate Change Basics",
+    difficulty: "Beginner",
+    completion: 76,
+    icon: "🌍",
+    creator: "Dr. Maya Johnson",
+    tags: ["Science", "Environment"],
+    category: "Science",
+    type: "video",
+  },
+  {
+    title: "Digital Marketing 101",
+    difficulty: "Beginner",
+    completion: 84,
+    icon: "📱",
+    creator: "Sarah Williams",
+    tags: ["Marketing", "Business"],
+    category: "Business",
+    type: "slides",
+  },
+  {
+    title: "Introduction to Psychology",
+    difficulty: "Beginner",
+    completion: 79,
+    icon: "🧠",
+    creator: "Dr. James Peterson",
+    tags: ["Psychology", "Science"],
+    category: "Science",
+    type: "video",
+  },
+  {
+    title: "Web Design Fundamentals",
+    difficulty: "Intermediate",
+    completion: 68,
+    icon: "🎨",
+    creator: "Emma Rodriguez",
+    tags: ["Design", "Web"],
+    category: "Arts",
+    type: "slides",
+  },
+  {
+    title: "Data Science Essentials",
+    difficulty: "Intermediate",
+    completion: 72,
+    icon: "📊",
+    creator: "Michael Thompson",
+    tags: ["Data", "Programming"],
+    category: "Technology",
+    type: "video",
+  },
+  {
+    title: "Creative Writing Workshop",
+    difficulty: "All Levels",
+    completion: 88,
+    icon: "✍️",
+    creator: "Olivia Parker",
+    tags: ["Writing", "Arts"],
+    category: "Arts",
+    type: "slides",
+  },
+  {
+    title: "Personal Finance Basics",
+    difficulty: "Beginner",
+    completion: 91,
+    icon: "💰",
+    creator: "Robert Garcia",
+    tags: ["Finance", "Life Skills"],
+    category: "Business",
+    type: "slides",
+  },
+  {
+    title: "Introduction to Astronomy",
+    difficulty: "Beginner",
+    completion: 85,
+    icon: "🔭",
+    creator: "Dr. Samantha Lee",
+    tags: ["Space", "Science"],
+    category: "Science",
+    type: "video",
+  },
+  {
+    title: "Healthy Cooking Fundamentals",
+    difficulty: "All Levels",
+    completion: 77,
+    icon: "🥗",
+    creator: "Chef Daniel Kim",
+    tags: ["Cooking", "Health"],
+    category: "Lifestyle",
+    type: "slides",
+  },
+  {
+    title: "Yoga for Beginners",
+    difficulty: "Beginner",
+    completion: 94,
+    icon: "🧘",
+    creator: "Sophia Martinez",
+    tags: ["Fitness", "Wellness"],
+    category: "Health",
+    type: "video",
+  },
+  {
+    title: "Photography Basics",
+    difficulty: "Beginner",
+    completion: 81,
+    icon: "📷",
+    creator: "David Wilson",
+    tags: ["Photography", "Arts"],
+    category: "Arts",
+    type: "slides",
+  },
+  {
+    title: "React Hooks Audio Course",
+    difficulty: "Intermediate",
+    completion: 78,
+    icon: "🎧",
+    creator: "Miss Nova",
+    tags: ["Programming", "React", "Audio"],
+    category: "Technology",
+    type: "audio",
+  },
+  {
+    title: "Meditation & Mindfulness",
+    difficulty: "All Levels",
+    completion: 92,
+    icon: "🧘",
+    creator: "Dr. Sarah Chen",
+    tags: ["Wellness", "Mindfulness", "Audio"],
+    category: "Health",
+    type: "audio",
+  },
+  {
+    title: "Language Learning - Spanish",
+    difficulty: "Beginner",
+    completion: 85,
+    icon: "🗣️",
+    creator: "Prof. Maria Rodriguez",
+    tags: ["Language", "Spanish", "Audio"],
+    category: "Language",
+    type: "audio",
+  },
+];
+
+// Mock course data for the "Try" button
+const mockCourseData = {
+  slides: [
+    {
+      slide_number: 1,
+      title: "Introduction",
+      content:
+        "## Welcome to this course!\n\nThis is the first slide of your selected course. In a real implementation, this would contain actual course content specific to the topic you selected.",
+      quiz: {
+        question: "What is the purpose of this course?",
+        options: [
+          "To teach programming",
+          "To provide an overview of the selected topic",
+          "To test the platform",
+          "None of the above",
+        ],
+        correct_answer: "To provide an overview of the selected topic",
+        explanation:
+          "This course is designed to give you a comprehensive overview of the topic you selected.",
+      },
+    },
+    // Additional slides would be here
+  ],
+};
+
+// Add mock slides data to all courses
+allCourses.forEach((course) => {
+  course.slides = mockCourseData.slides;
+});
 
 // Categories for filtering
 const categories = [
@@ -33,37 +248,9 @@ export default function ExplorePage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedDifficulty, setSelectedDifficulty] = useState("All Levels");
-  const [allCourses, setAllCourses] = useState<Course[]>([]);
-  const [filteredCourses, setFilteredCourses] = useState<Course[]>([]);
+  const [filteredCourses, setFilteredCourses] = useState(allCourses);
   const [activeTab, setActiveTab] = useState("all");
   const [showFilters, setShowFilters] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  // Fetch courses from database
-  useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        setIsLoading(true);
-        setError(null);
-
-        const response = await fetch("/api/courses");
-        if (!response.ok) {
-          throw new Error("Failed to fetch courses");
-        }
-
-        const courses = await response.json();
-        setAllCourses(courses);
-      } catch (err) {
-        console.error("Error fetching courses:", err);
-        setError("Failed to load courses. Please try again.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchCourses();
-  }, []);
 
   // Filter courses based on search query, category, and difficulty
   useEffect(() => {
@@ -96,72 +283,15 @@ export default function ExplorePage() {
     // Filter by tab
     if (activeTab === "trending") {
       filtered = filtered
-        .sort(
-          (a, b) =>
-            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-        )
+        .sort((a, b) => b.completion - a.completion)
         .slice(0, 6);
     } else if (activeTab === "new") {
-      // Sort by creation date for new courses
-      filtered = [...filtered]
-        .sort(
-          (a, b) =>
-            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-        )
-        .slice(0, 6);
+      // In a real app, you'd sort by date added
+      filtered = [...filtered].sort(() => 0.5 - Math.random()).slice(0, 6);
     }
 
     setFilteredCourses(filtered);
-  }, [
-    searchQuery,
-    selectedCategory,
-    selectedDifficulty,
-    activeTab,
-    allCourses,
-  ]);
-
-  // Show loading state
-  if (isLoading) {
-    return (
-      <main className="min-h-screen p-4 md:p-8 bg-background">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex items-center justify-center min-h-[400px]">
-            <div className="flex flex-col items-center gap-4">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-              <div className="text-primary font-medium">Loading courses...</div>
-            </div>
-          </div>
-        </div>
-      </main>
-    );
-  }
-
-  // Show error state
-  if (error) {
-    return (
-      <main className="min-h-screen p-4 md:p-8 bg-background">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center py-12">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-destructive/10 mb-4">
-              <Search className="h-8 w-8 text-destructive" />
-            </div>
-            <h3 className="text-xl font-bold mb-2 font-heading text-destructive">
-              Error Loading Courses
-            </h3>
-            <p className="text-muted-foreground max-w-md mx-auto font-body mb-4">
-              {error}
-            </p>
-            <Button
-              onClick={() => window.location.reload()}
-              className="btn-playful font-body"
-            >
-              Try Again
-            </Button>
-          </div>
-        </div>
-      </main>
-    );
-  }
+  }, [searchQuery, selectedCategory, selectedDifficulty, activeTab]);
 
   return (
     <main className="min-h-screen p-4 md:p-8 bg-background">
@@ -360,7 +490,7 @@ function CourseGrid({ courses }: CourseGridProps) {
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {courses.map((course, index) => (
         <motion.div
-          key={course.id}
+          key={course.title}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: index * 0.05 }}
@@ -369,14 +499,13 @@ function CourseGrid({ courses }: CourseGridProps) {
           <CourseTile
             title={course.title}
             difficulty={course.difficulty}
-            completion={75} // Default completion percentage for now
+            completion={course.completion}
             icon={course.icon}
             creator={course.creator}
             category={course.category}
             tags={course.tags}
-            slides={[]} // Will be loaded when course is selected
+            slides={course.slides}
             type={course.type}
-            courseId={course.id}
           />
         </motion.div>
       ))}

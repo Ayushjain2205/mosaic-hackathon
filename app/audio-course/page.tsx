@@ -126,38 +126,9 @@ export default function AudioCoursePage() {
     const fetchCourseContent = async () => {
       setIsLoading(true);
       try {
-        // Get course data from localStorage (set by CourseTile)
-        const storedCourse = localStorage.getItem("currentCourse");
-        if (storedCourse) {
-          const courseData = JSON.parse(storedCourse);
-          console.log("Audio course data from localStorage:", courseData);
-
-          // Check if the data has the expected structure (sections for audio courses)
-          if (
-            courseData.type === "audio" &&
-            (!courseData.sections || courseData.sections.length === 0)
-          ) {
-            console.log(
-              "Incomplete data in localStorage, fetching from database..."
-            );
-            // Fetch from database if localStorage data is incomplete
-            const response = await fetch(`/api/courses/${courseData.id}`);
-            if (response.ok) {
-              const dbCourseData = await response.json();
-              console.log("Audio course data from database:", dbCourseData);
-              setCourseContent(dbCourseData);
-            } else {
-              setCourseContent(courseData); // Fallback to localStorage data
-            }
-          } else {
-            setCourseContent(courseData);
-          }
-        } else {
-          // Fallback to mock data if no course is stored
-          const response = await fetch("/api/mock-audio-course");
-          const data = await response.json();
-          setCourseContent(data);
-        }
+        const response = await fetch("/api/mock-audio-course");
+        const data = await response.json();
+        setCourseContent(data);
       } catch (error) {
         console.error("Error fetching course content:", error);
       } finally {
@@ -209,8 +180,6 @@ export default function AudioCoursePage() {
     if (!selectedAnswer) return;
 
     const currentSection = courseContent.sections[currentSectionIndex];
-    if (!currentSection?.quiz) return; // Skip if no quiz available
-
     const isCorrect = selectedAnswer === currentSection.quiz.correct_answer;
 
     // Update section with user's answer
@@ -384,39 +353,38 @@ export default function AudioCoursePage() {
                   </div>
 
                   {/* Quiz Section */}
-                  {!isLoading &&
-                    courseContent.sections[currentSectionIndex]?.quiz && (
-                      <div className="p-6 space-y-6 border-t border-primary/10">
-                        <div className="space-y-6">
-                          <QuizSection
-                            question={
-                              courseContent.sections[currentSectionIndex]?.quiz
-                                ?.question || ""
-                            }
-                            options={
-                              courseContent.sections[currentSectionIndex]?.quiz
-                                ?.options || []
-                            }
-                            correctAnswer={
-                              courseContent.sections[currentSectionIndex]?.quiz
-                                ?.correct_answer || ""
-                            }
-                            explanation={
-                              courseContent.sections[currentSectionIndex]?.quiz
-                                ?.explanation || ""
-                            }
-                            userAnswer={
-                              courseContent.sections[currentSectionIndex]
-                                ?.userAnswer
-                            }
-                            selectedAnswer={selectedAnswer}
-                            showExplanation={showExplanation}
-                            onAnswerSelect={setSelectedAnswer}
-                            onAnswerSubmit={handleAnswerSubmit}
-                          />
-                        </div>
+                  {!isLoading && (
+                    <div className="p-6 space-y-6 border-t border-primary/10">
+                      <div className="space-y-6">
+                        <QuizSection
+                          question={
+                            courseContent.sections[currentSectionIndex]?.quiz
+                              .question || ""
+                          }
+                          options={
+                            courseContent.sections[currentSectionIndex]?.quiz
+                              .options || []
+                          }
+                          correctAnswer={
+                            courseContent.sections[currentSectionIndex]?.quiz
+                              .correct_answer || ""
+                          }
+                          explanation={
+                            courseContent.sections[currentSectionIndex]?.quiz
+                              .explanation || ""
+                          }
+                          userAnswer={
+                            courseContent.sections[currentSectionIndex]
+                              ?.userAnswer
+                          }
+                          selectedAnswer={selectedAnswer}
+                          showExplanation={showExplanation}
+                          onAnswerSelect={setSelectedAnswer}
+                          onAnswerSubmit={handleAnswerSubmit}
+                        />
                       </div>
-                    )}
+                    </div>
+                  )}
                 </CardContent>
               </Card>
 
