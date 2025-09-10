@@ -281,8 +281,19 @@ export default function Home() {
       setIsLoading(true);
       setError("");
 
-      // Add cache-busting query parameter and proper error handling
-      const response = await fetch("/api/generate-course", {
+      // Choose the appropriate API based on course type
+      const apiEndpoint =
+        courseType === "video"
+          ? "/api/generate-video-course"
+          : courseType === "audio"
+          ? "/api/generate-audio-course"
+          : "/api/generate-course";
+
+      console.log(
+        `🎯 [MAIN] Using API endpoint: ${apiEndpoint} for course type: ${courseType}`
+      );
+
+      const response = await fetch(apiEndpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -126,7 +126,32 @@ export default function AudioCoursePage() {
     const fetchCourseContent = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch("/api/mock-audio-course");
+        // First, try to get course data from localStorage
+        const storedCourse = localStorage.getItem("currentCourse");
+        if (storedCourse) {
+          console.log(
+            "🎧 [AUDIO-COURSE] Using stored course data:",
+            JSON.parse(storedCourse)
+          );
+          setCourseContent(JSON.parse(storedCourse));
+          setIsLoading(false);
+          return;
+        }
+
+        // If no stored course, generate a new one with a default prompt
+        console.log(
+          "🔄 [AUDIO-COURSE] No stored course found, generating new audio course"
+        );
+        const response = await fetch("/api/generate-audio-course", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ prompt: "Introduction to Web Development" }),
+        });
+        if (!response.ok) {
+          throw new Error("Failed to fetch course data");
+        }
         const data = await response.json();
         setCourseContent(data);
       } catch (error) {
