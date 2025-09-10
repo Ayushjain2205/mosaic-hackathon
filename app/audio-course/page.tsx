@@ -43,6 +43,7 @@ interface Quiz {
 interface CourseSection {
   title: string;
   content: string;
+  script: string;
   key_points: string[];
   quiz: Quiz;
   userAnswer?: string;
@@ -84,6 +85,7 @@ export default function AudioCoursePage() {
 
   // State
   const [isLoading, setIsLoading] = useState(true);
+  const [isGeneratingAudio, setIsGeneratingAudio] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
@@ -142,6 +144,7 @@ export default function AudioCoursePage() {
         console.log(
           "🔄 [AUDIO-COURSE] No stored course found, generating new audio course"
         );
+        setIsGeneratingAudio(true);
         const response = await fetch("/api/generate-audio-course", {
           method: "POST",
           headers: {
@@ -154,6 +157,7 @@ export default function AudioCoursePage() {
         }
         const data = await response.json();
         setCourseContent(data);
+        setIsGeneratingAudio(false);
       } catch (error) {
         console.error("Error fetching course content:", error);
       } finally {
@@ -354,12 +358,14 @@ export default function AudioCoursePage() {
                 <CardContent className="p-6">
                   {/* Audio Visualizer */}
                   <div className="w-full">
-                    {isLoading ? (
+                    {isLoading || isGeneratingAudio ? (
                       <div className="w-full h-48 flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 rounded-xl">
                         <div className="flex flex-col items-center gap-4">
                           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
                           <div className="text-primary font-medium">
-                            Loading audio content...
+                            {isGeneratingAudio
+                              ? "Generating audio content..."
+                              : "Loading audio content..."}
                           </div>
                         </div>
                       </div>
